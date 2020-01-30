@@ -1,15 +1,13 @@
 http:
-  port: 8080
+  port: 8449
 admin:
-  port: 9876
+  port: 8490
   host: localhost
-apiEndpoints:
-  api:
-    host: localhost
-    paths: '/ip'
 serviceEndpoints:
   httpbin:
     url: 'https://httpbin.org'
+  adminBackend:
+    url: https://localhost:8490
 policies:
   - basic-auth
   - cors
@@ -19,14 +17,35 @@ policies:
   - oauth2
   - proxy
   - rate-limit
+  - rewrite
 pipelines:
-  default:
+  adminAPI:
     apiEndpoints:
-      - api
+      - admin
+    policies:
+      - rewrite:
+          - condition:
+              name: pathmatch
+              match: /adminapi/:route*
+            action:
+              rewrite: /:route
+      - proxy:
+          - action:
+              serviceEndpoint: adminBackend
+  httpbin:
+    apiEndpoints:
+      - general
     policies:
     # Uncomment `key-auth:` when instructed to in the Getting Started guide.
-    # - key-auth:
+      - key-auth:
       - proxy:
           - action:
               serviceEndpoint: httpbin 
               changeOrigin: true
+apiEndpoints:
+  general:
+    host: localhost
+    paths: '/ip'
+  admin:
+    host: localhost
+    paths: "/adminapi/*"

@@ -1,7 +1,8 @@
 # Core
 db:
   redis:
-    emulate: true
+    host: localhost
+    port: 6379
     namespace: EG
 
 #plugins:
@@ -15,7 +16,7 @@ crypto:
 
 # OAuth2 Settings
 session:
-  secret: keyboard cat
+  secret: insomniacVidyaG8mr
   resave: false
   saveUninitialized: false
 accessTokens:
@@ -24,3 +25,7 @@ refreshTokens:
   timeToExpiry: 7200000
 authorizationCodes:
   timeToExpiry: 300000
+
+plugins:
+  rewrite:
+    package: express-gateway-plugin-rewrite

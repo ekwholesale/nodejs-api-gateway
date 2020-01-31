@@ -1,10 +1,24 @@
 version: '3'
 services:
+    express:
+        build:
+            context: ./
+        container_name: express_gateway
+        env_file: .env
+        ports:
+            - "8449:8449"
+        depends_on:
+            - redis
+        links:
+            - redis
+        networks:
+            - redis-net
+        command: bash -c "npm install -g express-gateway && npm install && npm start"
     redis:
         ports:
             - 6379:6379
         image: redis:4.0.5-alpine
-        command: ["redis-server", "--appendonly", "yes"]
+        command: ["redis-server", "--appendonly", "yes", "--bind", "redis", "--port", "6379"]
         hostname: redis
         networks:
           - redis-net

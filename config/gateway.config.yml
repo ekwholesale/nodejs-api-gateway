@@ -25,10 +25,11 @@ pipelines:
     apiEndpoints:
       - admin
     policies:
+      - key-auth:
       - rewrite:
           - condition:
               name: pathmatch
-              match: /adminapi/:route*
+              match: /ctrlpoint/:route*
             action:
               rewrite: /:route
       - proxy:
@@ -65,8 +66,7 @@ apiEndpoints:
     paths: '/ip'
   admin:
     host: localhost
-    paths: "/adminapi/*"
-    methods: ["GET", "PUT", "POST", "PATCH", "OPTIONS", "DELETE"]
+    paths: "/ctrlpoint/*"
     scopes:
       - "admin"
   dropship:

@@ -2,7 +2,7 @@ version: '3'
 services:
     express:
         build:
-            context: ./
+            context: .
         container_name: express_gateway
         env_file: .env
         ports:

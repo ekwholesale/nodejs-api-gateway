@@ -1,11 +1,9 @@
-FROM node:10
+FROM node:13.7.0-stretch-slim
 
 WORKDIR /usr/src/app
 
 COPY package*.json ./
 
 COPY . .
-
-EXPOSE 6379
 
 RUN apt-get update

@@ -3,6 +3,7 @@ services:
     express:
         build:
             context: .
+        image: 
         container_name: express_gateway
         restart: always
         hostname: egek
@@ -17,11 +18,9 @@ services:
             - redis-net
         command: bash -c "npm install -g express-gateway && npm install && npm start"
     redis:
-        ports:
-            - 6379:6379
         image: redis:4.0.5-alpine
         restart: always
-        command: ["redis-server", "--appendonly", "yes", "--bind", "redis", "--port", "6379"]
+        command: ["redis-server", "--appendonly", "yes", "--bind", "0.0.0.0", "--port", "6379", "--requirepass", "exlamioma5@589EkWh0"]]
         hostname: redis
         networks:
           - redis-net

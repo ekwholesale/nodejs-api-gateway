@@ -3,7 +3,6 @@ services:
     express:
         build:
             context: .
-        image: 
         container_name: express_gateway
         restart: always
         hostname: egek

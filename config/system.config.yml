@@ -4,6 +4,7 @@ db:
     host: redis
     port: 6379
     namespace: EG
+    password: ${REDIS_PW}
 
 #plugins:
   # express-gateway-plugin-example:

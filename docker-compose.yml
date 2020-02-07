@@ -15,17 +15,22 @@ services:
             - redis
         networks:
             - redis-net
+            - grafana_monitor-net
         command: bash -c "npm install -g express-gateway && npm install && npm start"
     redis:
         image: redis:4.0.5-alpine
         restart: always
-        command: ["redis-server", "--appendonly", "yes", "--bind", "0.0.0.0", "--port", "6379", "--requirepass", "exlamioma5@589EkWh0"]]
+        env_file: .env
+        command: sh -c "redis-server --appendonly yes --bind 0.0.0.0 --port 6379 --requirepass $${REDIS_PW}"
         hostname: redis
         networks:
           - redis-net
+          - grafana_monitor-net
         volumes:
           - redis-data:/data
 networks:
     redis-net:
+    grafana_monitor-net:
+        external: true      
 volumes:
     redis-data:

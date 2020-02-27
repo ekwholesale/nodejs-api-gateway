@@ -4,10 +4,8 @@ admin:
   port: 8490
   host: localhost
 serviceEndpoints:
-  httpbin:
-    url: 'https://httpbin.org'
   dropship:
-    url: 'http://localhost:4999'
+    url: 'http://dsgql:4000'
   adminBackend:
     url: 'http://localhost:8490'
 policies:
@@ -35,49 +33,31 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: adminBackend
-  httpbin:
-    apiEndpoints:
-      - general
-    policies:
-    # Uncomment `key-auth:` when instructed to in the Getting Started guide.
-      - key-auth:
-      - proxy:
-          - action:
-              serviceEndpoint: httpbin 
-              changeOrigin: true
   dropship:
     apiEndpoints:
       - dropship
     policies:
       - key-auth:
       - rewrite:
-        - condition:
-            name: pathmatch
-            match: /dropship/:route*
-          action:
-            rewrite: /api/:route
+          - condition:
+              name: pathmatch
+              match: /dropship/:route*
+            action:
+              rewrite: /
+      - log:
+          - action:
+              message: ${req.method} ${req.originalUrl} -> ${req.url}
       - proxy:
-        - action:
-            serviceEndpoint: dropship
-            changeOrigin: true
+          - action:
+              serviceEndpoint: dropship
 apiEndpoints:
-  general:
-    host: localhost
-    paths: '/ip'
   admin:
     host: localhost
     paths: "/ctrlpoint/*"
     scopes:
       - "admin"
   dropship:
-    - host: localhost
-      methods: ["GET"]
-      paths: 
-        - '/dropship/orders/'
-        - '/dropship/orders/:id/status'
-        - '/dropship/orders/:id/tracking'
-
-    - host: localhost
-      methods: ["POST"]
-      paths:
-        - '/dropship/orders'
+    host: "*"
+    path: "/dropship/"
+    scopes:
+      - "dropship"

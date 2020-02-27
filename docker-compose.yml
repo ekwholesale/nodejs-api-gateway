@@ -1,4 +1,4 @@
-version: '3'
+version: '3.5'
 services:
     express:
         build:
@@ -14,6 +14,7 @@ services:
         links:
             - redis
         networks:
+            - gateway
             - redis-net
             - grafana_monitor-net
         command: bash -c "npm install -g express-gateway && npm install && npm start"
@@ -24,11 +25,15 @@ services:
         command: sh -c "redis-server --appendonly yes --bind 0.0.0.0 --port 6379 --requirepass $${REDIS_PW}"
         hostname: redis
         networks:
+          - gateway
           - redis-net
           - grafana_monitor-net
         volumes:
           - redis-data:/data
 networks:
+    gateway:
+        driver: bridge
+        name: gateway
     redis-net:
     grafana_monitor-net:
         external: true      

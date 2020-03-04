@@ -1,9 +1,9 @@
 version: '3.5'
 services:
-    express:
+    egek:
         build:
             context: .
-        container_name: express_gateway
+        container_name: egek
         restart: always
         hostname: egek
         env_file: .env

@@ -30,6 +30,9 @@ pipelines:
               match: /ctrlpoint/:route*
             action:
               rewrite: /:route
+      - log:
+        - action:
+            message: ${req.method} ${req.originalUrl} -> ${req.url}              
       - proxy:
           - action:
               serviceEndpoint: adminBackend
@@ -52,7 +55,7 @@ pipelines:
               serviceEndpoint: dropship
 apiEndpoints:
   admin:
-    host: localhost
+    host: "*"
     paths: "/ctrlpoint/*"
     scopes:
       - "admin"

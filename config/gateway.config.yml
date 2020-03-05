@@ -8,6 +8,8 @@ serviceEndpoints:
     url: 'http://dsgql:4000'
   adminBackend:
     url: 'http://localhost:8490'
+  apihealth:
+    url: 'http://healthapi:4090'
 policies:
   - basic-auth
   - cors
@@ -53,6 +55,17 @@ pipelines:
       - proxy:
           - action:
               serviceEndpoint: dropship
+  apihealth:
+    apiEndpoints:
+      - apihealth
+    policies:
+      - key-auth:
+      - log:
+        - action:
+           message: ${req.method} ${req.originalUrl} -> ${req.url}
+      - proxy:
+          - action:
+              serviceEndpoint: apihealth
 apiEndpoints:
   admin:
     host: "*"
@@ -64,3 +77,8 @@ apiEndpoints:
     path: "/dropship/"
     scopes:
       - "dropship"
+  apihealth:
+    host: "*"
+    path: "/health/"
+    scopes:
+      - "admin"

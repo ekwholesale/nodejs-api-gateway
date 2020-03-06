@@ -79,6 +79,6 @@ apiEndpoints:
       - "dropship"
   apihealth:
     host: "*"
-    path: "/health/"
+    path: "/health/*"
     scopes:
       - "admin"

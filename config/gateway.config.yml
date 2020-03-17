@@ -42,6 +42,10 @@ pipelines:
     apiEndpoints:
       - dropship
     policies:
+      - cors:
+        - action:
+            origin: true
+            credentials: true
       - key-auth:
       - rewrite:
           - condition:
